@@ -25,3 +25,7 @@ post '/register' do
   end
   erb :post_form
 end
+
+post '/approval' do
+  p params
+end
