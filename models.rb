@@ -5,8 +5,13 @@ require 'carrierwave/orm/activerecord'
 require 'carrierwave/processing/rmagick'
 
 config  = YAML.load_file( './database.yml' )
+
 ActiveRecord::Base.configurations = config
-ActiveRecord::Base.establish_connection(config["development"])
+if development?
+  ActiveRecord::Base.establish_connection(config["development"])
+else
+  ActiveRecord::Base.establish_connection(config["production"])
+end
 
 Time.zone = "Tokyo"
 ActiveRecord::Base.default_timezone = :local
