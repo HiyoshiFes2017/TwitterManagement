@@ -23,6 +23,5 @@ post '/register' do
   else
     session[:responce] = {code: 400, messages: nana.errors.full_messages[0]}
   end
-  binding.pry
   erb :post_form
 end
