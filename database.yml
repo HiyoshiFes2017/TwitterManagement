@@ -1,0 +1,8 @@
+development:
+  adapter: postgresql
+  encodeing: unicode
+  host: db
+  database: twitter_management
+  username: postgres
+  pool: 20
+  timeout: 15000

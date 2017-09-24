@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  db:
+    image: postgres:9.6.2-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    # command: bundle exec ruby app.rb -p 4567 -o 0.0.0.0
+    command: bundle exec rackup -p 4567 -o 0.0.0.0
+    volumes:
+      - .:/app
+      - bundle_install:/app/vendor/bundle
+      - bundle:/app/.bundle
+    tty: true
+    stdin_open: true
+    env_file: .env
+    ports:
+      - 4567:4567
+    links:
+      - db
+
+volumes:
+  postgres_data:
+    driver: local
+  bundle_install:
+    driver: local
+  bundle:
+    driver: local
+
