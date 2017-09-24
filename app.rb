@@ -3,7 +3,7 @@ Bundler.require
 require "sinatra"
 require "sinatra/base"
 require "sinatra/reloader"
-require "pry"
+require "pry" if development?
 require "json"
 
 require "./models"
