@@ -31,6 +31,7 @@ end
 post '/approval' do
   data = JSON.parse(params["payload"])
   if data["actions"].first["name"] == "ok"
+    tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
     @rest = Twitter::REST::Client.new(
       {
         consumer_key: ENV.fetch("CONSUMER_KEY"),
@@ -40,7 +41,6 @@ post '/approval' do
       }
 
     )
-    tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
     if tweet
       open(tweet.file.medium.url) do |tmp|
         @rest.update_with_media(tweet.comment, tmp)
