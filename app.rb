@@ -40,7 +40,7 @@ post '/approval' do
       }
 
     )
-    tweet = Nana.find_by(id: data.value.to_i)
+    tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
     @rest.update("#{tweet.comment}\n#{tweet.file.medium.url}")
     tweet.sent!
     pp data
