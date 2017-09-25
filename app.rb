@@ -30,6 +30,7 @@ end
 
 post '/approval' do
   data = JSON.parse(params["payload"])
+  pp data
   if data["actions"].first["name"] == "ok"
     @rest = Twitter::REST::Client.new(
       {
@@ -41,7 +42,6 @@ post '/approval' do
 
     )
     tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
-    # @rest.update("#{tweet.comment}\n#{tweet.file.medium.url}")
     open(tweet.file.medium.url) do |tmp|
       @rest.update_with_media(tweet.comment, tmp)
     end
@@ -51,7 +51,7 @@ post '/approval' do
     tweet.sent!
   end
   data["original_message"]["text"] = "Succes Tweet!"
-  json({payload: data})
+  json({text: "OK"})
 end
 
 private
