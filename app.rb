@@ -46,12 +46,12 @@ post '/approval' do
       @rest.update_with_media(tweet.comment, tmp)
     end
     tweet.sent!
-    pp data
+    json({text: "Successfully Tweeted!"})
   else
     tweet.sent!
+    json({text: "Successfully Canceled~"})
   end
-  data["original_message"]["text"] = "Succes Tweet!"
-  json({text: "OK"})
+  json({text: "error!"})
 end
 
 private
@@ -95,6 +95,6 @@ def sent_verification
     }.to_json
     req.body = payload
     res = https.request(req)
-    # nana.verification! if development?
+    nana.verification!
   end
 end
