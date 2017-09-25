@@ -50,12 +50,12 @@ post '/approval' do
       json({text: "Successfully Tweeted!"})
     else
       puts "error"
-    json({text: "Error! select id is not found!"})
+      json({text: "Error! select id is not found!"})
     end
+  else
     tweet.sent!
     puts "Canceled!"
     json({text: "Successfully Canceled!"})
-  else
   end
 end
 
