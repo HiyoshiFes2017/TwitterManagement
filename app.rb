@@ -30,8 +30,8 @@ end
 
 post '/approval' do
   data = JSON.parse(params["payload"])
+  tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
   if data["actions"].first["name"] == "ok"
-    tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
     @rest = Twitter::REST::Client.new(
       {
         consumer_key: ENV.fetch("CONSUMER_KEY"),
