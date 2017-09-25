@@ -43,6 +43,7 @@ post '/approval' do
     tweet = Nana.find_by(id: data.value.to_i)
     @rest.update("#{tweet.comment}\n#{tweet.file.medium.url}")
     tweet.sent!
+    pp data
   else
     tweet.sent!
   end
@@ -54,7 +55,7 @@ private
 
 def sent_verification 
   Nana.where(status: "unsent").each do |nana|
-    uri = URI.parse("https://hooks.slack.com/services/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")
+    uri = URI.parse(ENV.fetch("SLACK_URL"))
     https = Net::HTTP.new(uri.host, uri.port)
 
     https.use_ssl = true # HTTPSでよろしく

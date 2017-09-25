@@ -14,6 +14,9 @@ gem 'carrierwave'
 gem 'rmagick'
 gem 'fog'
 
+#time keeper
+gem 'whenever' , :require => false
+
 #database
 gem 'pg', '~> 0.18'
 
