@@ -30,7 +30,6 @@ end
 
 post '/approval' do
   data = JSON.parse(params["payload"])
-  pp data
   if data["actions"].first["name"] == "ok"
     @rest = Twitter::REST::Client.new(
       {
@@ -42,16 +41,21 @@ post '/approval' do
 
     )
     tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
-    open(tweet.file.medium.url) do |tmp|
-      @rest.update_with_media(tweet.comment, tmp)
+    if tweet
+      open(tweet.file.medium.url) do |tmp|
+        @rest.update_with_media(tweet.comment, tmp)
+      end
+      tweet.sent!
+      puts "Tweeted!"
+      json({text: "Successfully Tweeted!"})
+    else
+      puts "error"
+    json({text: "Error! select id is not found!"})
     end
-    tweet.sent!
-    puts "Tweeted!"
-    json({text: "Successfully Tweeted!"})
-  else
     tweet.sent!
     puts "Canceled!"
     json({text: "Successfully Canceled!"})
+  else
   end
 end
 
