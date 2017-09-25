@@ -17,6 +17,9 @@ gem 'fog'
 #time keeper
 gem 'whenever' , :require => false
 
+#twitter
+gem 'twitter'
+
 #database
 gem 'pg', '~> 0.18'
 
