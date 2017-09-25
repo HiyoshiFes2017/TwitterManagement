@@ -43,7 +43,7 @@ post '/approval' do
     tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
     # @rest.update("#{tweet.comment}\n#{tweet.file.medium.url}")
     open(tweet.file.medium.url) do |tmp|
-      witter_client.update_with_media(tweet.comment, tmp)
+      @rest.update_with_media(tweet.comment, tmp)
     end
     tweet.sent!
     pp data
