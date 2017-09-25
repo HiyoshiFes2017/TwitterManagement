@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170924080939) do
+ActiveRecord::Schema.define(version: 20170924232922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170924080939) do
   create_table "nanas", force: :cascade do |t|
     t.string "comment"
     t.string "file"
+    t.integer "status", default: 0, null: false
   end
 
 end

@@ -34,5 +34,5 @@ end
 class Nana < ActiveRecord::Base
   mount_uploader :file, ImageUploader
   validates :comment, :file, presence: true
+  enum status: {unsent: 0, verification: 1, sent: 2}
 end
-
