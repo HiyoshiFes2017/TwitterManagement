@@ -46,12 +46,13 @@ post '/approval' do
       @rest.update_with_media(tweet.comment, tmp)
     end
     tweet.sent!
+    puts "Tweeted!"
     json({text: "Successfully Tweeted!"})
   else
     tweet.sent!
-    json({text: "Successfully Canceled~"})
+    puts "Canceled!"
+    json({text: "Successfully Canceled!"})
   end
-  json({text: "error!"})
 end
 
 private
