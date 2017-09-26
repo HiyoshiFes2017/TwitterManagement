@@ -57,6 +57,11 @@ post '/approval' do
         json({text: "Successfully Tweeted!"})
       end
 
+      results = Process.waitall
+      results.each do |r|
+        raise unless pids.include?(r[0] && r[1].success?)
+      end
+
     else
       json({text: "Error! select id is not found!"})
     end
