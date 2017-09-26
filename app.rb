@@ -19,6 +19,7 @@ end
 
 get '/send_to_slack' do
   sent_verification
+  json({status: 200} )
 end
 
 post '/register' do
@@ -46,22 +47,14 @@ post '/approval' do
 
     )
     if tweet
-      pids, media_ids = Array.new, Array.new
-
-      pids << fork do
-        tweet.files.each do |file|
-          media_ids << @rest.upload(open(file.medium.url))
-        end
-        @rest.update (tweet.comment), { media_ids: media_ids.join(',') }
-        tweet.sent!
-      end
+      media_ids = Array.new
 
       json({text: "Successfully Tweeted!"})
-
-      results = Process.waitall
-      results.each do |r|
-        raise unless pids.include?(r[0] && r[1].success?)
+      tweet.files.each do |file|
+        media_ids << @rest.upload(open(file.medium.url))
       end
+      @rest.update (tweet.comment), { media_ids: media_ids.join(',') }
+      tweet.sent!
 
     else
       json({text: "Error! select id is not found!"})
