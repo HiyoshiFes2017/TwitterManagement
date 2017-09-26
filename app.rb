@@ -45,6 +45,15 @@ post '/approval' do
       open(tweet.file.medium.url) do |tmp|
         @rest.update_with_media(tweet.comment, tmp)
       end
+
+      # media_ids = Array.new
+      # tweet.files.each do |file|
+      #   file.medium.each do |media|
+      #     media_ids << @rest.upload(open(media.url))
+      #   end
+      # end
+      # @rest.upload (tweet.commnet), { media_ids: media_ids.join(',') }
+
       tweet.sent!
       puts "Tweeted!"
       json({text: "Successfully Tweeted!"})
@@ -98,6 +107,10 @@ def sent_verification
         }
       ]
     }.to_json
+    # nana.files.each_with_index do |v,i|
+    # payload["attachments"][i] ||= {}
+    # payload["attachments"][i].merge!({image_url: v.medium.url})
+    # end
     req.body = payload
     res = https.request(req)
     nana.verification!
