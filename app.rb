@@ -14,8 +14,11 @@ not_found do
 end
 
 get '/' do
-  sent_verification
   erb :post_form
+end
+
+get '/send_to_slack' do
+  sent_verification
 end
 
 post '/register' do
@@ -53,9 +56,7 @@ post '/approval' do
         tweet.sent!
       end
 
-      pids << fork do
-        json({text: "Successfully Tweeted!"})
-      end
+      json({text: "Successfully Tweeted!"})
 
       results = Process.waitall
       results.each do |r|
