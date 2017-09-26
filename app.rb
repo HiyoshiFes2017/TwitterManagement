@@ -43,23 +43,25 @@ post '/approval' do
 
     )
     if tweet
+      pids, media_ids = Array.new, Array.new
 
-      media_ids = Array.new
-      tweet.files.each do |file|
-        media_ids << @rest.upload(open(file.medium.url))
+      pids << fork do
+        tweet.files.each do |file|
+          media_ids << @rest.upload(open(file.medium.url))
+        end
+        @rest.update (tweet.comment), { media_ids: media_ids.join(',') }
+        tweet.sent!
       end
-      @rest.update (tweet.comment), { media_ids: media_ids.join(',') }
 
-      tweet.sent!
-      puts "Tweeted!"
-      json({text: "Successfully Tweeted!"})
+      pids << fork do
+        json({text: "Successfully Tweeted!"})
+      end
+
     else
-      puts "error"
       json({text: "Error! select id is not found!"})
     end
   else
     tweet.sent!
-    puts "Canceled!"
     json({text: "Successfully Canceled!"})
   end
 end
