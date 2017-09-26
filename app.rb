@@ -51,7 +51,7 @@ post '/approval' do
       tweet.files.each do |file|
         media_ids << @rest.upload(open(file.medium.url))
       end
-      @rest.upload (tweet.commnet), { media_ids: media_ids.join(',') }
+      @rest.upload (tweet.comment), { media_ids: media_ids.join(',') }
 
       tweet.sent!
       puts "Tweeted!"
