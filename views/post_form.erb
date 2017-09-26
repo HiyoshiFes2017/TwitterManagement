@@ -2,7 +2,7 @@
   <h2><%= session[:responce][:messages] %></h2>
 <% end %>
 <form action="/register" enctype="multipart/form-data" method="POST">
-  <input type="text" name="comment"><br><br>
+  <textarea  type="text" name="comment"></textarea><br><br>
   <input type="file" name="image"><br><br>
   <input type="submit"><br><br>
 </form>
