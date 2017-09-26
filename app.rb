@@ -19,9 +19,10 @@ get '/' do
 end
 
 post '/register' do
-  nana = Nana.new(file: params[:image], comment: params[:comment])
+  nana = Nana.new(comment: params[:comment])
+  nana.files = params[:images]
   if nana.save
-    session[:responce] = {code: 200, messages: "成功しました"}
+    session[:responce] = {code: 200, messages: "成功しました", images: nana.files}
   else
     session[:responce] = {code: 400, messages: nana.errors.full_messages[0]}
   end
@@ -42,17 +43,15 @@ post '/approval' do
 
     )
     if tweet
-      open(tweet.file.medium.url) do |tmp|
-        @rest.update_with_media(tweet.comment, tmp)
-      end
-
-      # media_ids = Array.new
-      # tweet.files.each do |file|
-      #   file.medium.each do |media|
-      #     media_ids << @rest.upload(open(media.url))
-      #   end
+      # open(tweet.file.medium.url) do |tmp|
+      #   @rest.update_with_media(tweet.comment, tmp)
       # end
-      # @rest.upload (tweet.commnet), { media_ids: media_ids.join(',') }
+
+      media_ids = Array.new
+      tweet.files.each do |file|
+        media_ids << @rest.upload(open(file.medium.url))
+      end
+      @rest.upload (tweet.commnet), { media_ids: media_ids.join(',') }
 
       tweet.sent!
       puts "Tweeted!"
@@ -87,7 +86,7 @@ def sent_verification
           "callback_id": "callback_id value",
           "color": "#FF0000",
           "attachment_type": "default",
-          "image_url": nana.file.medium.url,
+          # "image_url": nana.file.medium.url,
           "actions": [
             {
               "name": "ok",
@@ -106,12 +105,13 @@ def sent_verification
           ]
         }
       ]
-    }.to_json
-    # nana.files.each_with_index do |v,i|
-    # payload["attachments"][i] ||= {}
-    # payload["attachments"][i].merge!({image_url: v.medium.url})
-    # end
-    req.body = payload
+    }
+    nana.files.each_with_index do |v,i|
+      payload[:attachments][i] ||= {}
+      payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: "danger"})
+    end
+    pp payload
+    req.body = payload.to_json
     res = https.request(req)
     nana.verification!
   end

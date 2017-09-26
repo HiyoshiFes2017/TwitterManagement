@@ -1,8 +1,11 @@
 <% if session[:responce] %>
   <h2><%= session[:responce][:messages] %></h2>
+  <% session[:responce][:images].each do |image| %>
+    <img src="<%= image.medium.url %>" alt="" width="50%" >
+  <% end %>
 <% end %>
 <form action="/register" enctype="multipart/form-data" method="POST">
   <textarea  type="text" name="comment"></textarea><br><br>
-  <input type="file" name="image"><br><br>
+  <input type="file" name="images[]" multiple><br><br>
   <input type="submit"><br><br>
 </form>

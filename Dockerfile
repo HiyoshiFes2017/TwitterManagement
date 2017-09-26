@@ -12,6 +12,8 @@ RUN apk --update add --virtual build-deps \
     nodejs \
     curl-dev \
     curl \
+		git \
+		less \
 		imagemagick \
 		imagemagick-dev \
   && rm -rf /var/cache/apk/* \

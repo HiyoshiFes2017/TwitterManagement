@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/carrierwaveuploader/carrierwave
+  revision: c0ae645fe8c0dc9169b312eb84cd963d79885e77
+  specs:
+    carrierwave (1.1.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -20,10 +29,6 @@ GEM
     buftok (0.2.0)
     builder (3.2.3)
     byebug (9.1.0)
-    carrierwave (1.1.0)
-      activemodel (>= 4.0.0)
-      activesupport (>= 4.0.0)
-      mime-types (>= 1.16)
     chronic (0.10.2)
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
@@ -268,7 +273,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  carrierwave
+  carrierwave!
   fog
   pg (~> 0.18)
   pry

@@ -10,7 +10,7 @@ gem "sinatra-contrib"
 gem "sinatra-activerecord"
 
 #image upload
-gem 'carrierwave'
+gem "carrierwave", :github => "carrierwaveuploader/carrierwave"
 gem 'rmagick'
 gem 'fog'
 
