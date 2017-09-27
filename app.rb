@@ -73,11 +73,19 @@ def sent_verification
     nanas.each do |nana|
       color = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample
       @payload = {
-        "text": nana.comment,
+        "text": "[参加団体の宣伝]\n\n" + nana.comment ,
+
         "attachments": [
           {
             "color": color,
             "attachment_type": "default",
+            "fields": [
+              {
+                "title": "現在の承認待ち数",
+                "value": Nana.where(status: "verification").count,
+                "short": true
+              }
+            ],
           }
         ]
       }
