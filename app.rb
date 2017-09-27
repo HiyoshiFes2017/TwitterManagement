@@ -73,25 +73,8 @@ def sent_verification
         {
           "fallback": "fallback string",
           "callback_id": "callback_id value",
-          "color": "#FF0000",
+          "color": ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample,
           "attachment_type": "default",
-          # "image_url": nana.file.medium.url,
-          "actions": [
-            {
-              "name": "ok",
-              "text": "承認",
-              "type": "button",
-              "style":"default",
-              "value": nana.id
-            },
-            {
-              "name": "no",
-              "text": "拒否",
-              "type": "button",
-              "style":"danger",
-              "value": nana.id
-            }
-          ]
         }
       ]
     }
@@ -99,7 +82,24 @@ def sent_verification
       payload[:attachments][i] ||= {}
       payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: "danger"})
     end
-    pp payload
+    payload[:attachments].last.merge!({
+      "actions": [
+        {
+          "name": "ok",
+          "text": "承認",
+          "type": "button",
+          "style":"default",
+          "value": nana.id
+        },
+        {
+          "name": "no",
+          "text": "拒否",
+          "type": "button",
+          "style":"danger",
+          "value": nana.id
+        }
+      ]
+    })
     req.body = payload.to_json
     res = https.request(req)
     nana.verification!
