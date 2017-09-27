@@ -1,11 +1,38 @@
-<% if session[:responce] %>
-  <h2><%= session[:responce][:messages] %></h2>
-  <% session[:responce][:images].each do |image| %>
-    <img src="<%= image.medium.url %>" alt="" width="50%" >
-  <% end %>
-<% end %>
-<form action="/register" enctype="multipart/form-data" method="POST">
-  <textarea  type="text" name="comment"></textarea><br><br>
-  <input type="file" name="images[]" multiple><br><br>
-  <input type="submit"><br><br>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>日吉祭画像アップローダー</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>
+body{
+  margin: 30px 10% 30px 10%;
+}
+h2{
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+img{
+  margin: 30px;
+}
+    </style>
+  </head>
+  <body>
+    <h2>日吉祭画像アップローダー</h2>
+    <% if session[:responce] %>
+      <div class="alert alert-success" role="alert"> <%= session[:responce][:messages] %> </div>
+      <% session[:responce][:images].each do |image| %>
+        <img src="<%= image.medium.url %>" alt="" width="20%" >
+      <% end %>
+    <% end %>
+    <form action="/register" enctype="multipart/form-data" method="POST">
+      <textarea  type="text" name="comment" class="form-control" rows="10"></textarea><br><br>
+      <input type="file" name="images[]" class="btn btn-default" multiple><br><br>
+      <input type="submit" class="btn"><br><br>
+    </form>
+  </body>
+</html>
