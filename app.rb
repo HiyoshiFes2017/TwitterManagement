@@ -45,67 +45,72 @@ post '/approval' do
     if tweet
       Hoge.twitter_auth.update (tweet.comment), { media_ids: tweet.media_ids }
       tweet.sent!
-      json({text: "Successfully Tweeted!"})
+      json({text: "ツイートしました！"})
 
     else
-      json({text: "Error! select id is not found!"})
+      json({text: "データが見つかりませんでした"})
     end
   else
     tweet.sent!
-    json({text: "Successfully Canceled!"})
+    json({text: "キャンセルしました"})
   end
 end
 
 private
 
 def sent_verification 
-  Nana.where(status: "unsent").each do |nana|
-    uri = URI.parse(ENV.fetch("SLACK_URL"))
-    https = Net::HTTP.new(uri.host, uri.port)
+  nanas = Nana.where(status: "unsent")
+  @payload = Hash.new
+  uri = URI.parse(ENV.fetch("SLACK_URL"))
+  https = Net::HTTP.new(uri.host, uri.port)
 
-    https.use_ssl = true # HTTPSでよろしく
-    req = Net::HTTP::Post.new(uri.request_uri)
+  https.use_ssl = true # HTTPSでよろしく
+  req = Net::HTTP::Post.new(uri.request_uri)
 
-    req["Content-Type"] = "application/json" # httpリクエストヘッダの追加
+  req["Content-Type"] = "application/json" # httpリクエストヘッダの追加
 
-    color = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample
-    puts color
-    payload = {
-      "text": nana.comment,
-      "attachments": [
-        {
-          "color": color,
-          "attachment_type": "default",
-        }
-      ]
-    }
-    nana.files.each_with_index do |v,i|
-      payload[:attachments][i] ||= {}
-      payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: color})
+  if nanas.exists?
+    nanas.each do |nana|
+      color = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample
+      @payload = {
+        "text": nana.comment,
+        "attachments": [
+          {
+            "color": color,
+            "attachment_type": "default",
+          }
+        ]
+      }
+      nana.files.each_with_index do |v,i|
+        @payload[:attachments][i] ||= {}
+        @payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: color})
+      end
+      @payload[:attachments].last.merge!({
+        "fallback": "fallback string",
+        "callback_id": "callback_id value",
+        "actions": [
+          {
+            "name": "ok",
+            "text": "承認",
+            "type": "button",
+            "style":"default",
+            "value": nana.id
+          },
+          {
+            "name": "no",
+            "text": "拒否",
+            "type": "button",
+            "style":"danger",
+            "value": nana.id
+          }
+        ]
+      })
+      nana.verification!
     end
-    payload[:attachments].last.merge!({
-      "fallback": "fallback string",
-      "callback_id": "callback_id value",
-      "actions": [
-        {
-          "name": "ok",
-          "text": "承認",
-          "type": "button",
-          "style":"default",
-          "value": nana.id
-        },
-        {
-          "name": "no",
-          "text": "拒否",
-          "type": "button",
-          "style":"danger",
-          "value": nana.id
-        }
-      ]
-    })
-    req.body = payload.to_json
-    res = https.request(req)
-    nana.verification!
-    pp payload
+  else
+    @payload = {"text": "承認待ちはありません"}
   end
+  req.body = @payload.to_json
+  res = https.request(req)
+  pp @payload
 end
