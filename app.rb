@@ -83,7 +83,7 @@ def sent_verification
     }
     nana.files.each_with_index do |v,i|
       payload[:attachments][i] ||= {}
-      payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: color)
+      payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: color})
     end
     payload[:attachments].last.merge!({
       "actions": [
