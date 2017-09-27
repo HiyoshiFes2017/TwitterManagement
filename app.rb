@@ -74,8 +74,6 @@ def sent_verification
       "text": nana.comment,
       "attachments": [
         {
-          "fallback": "fallback string",
-          "callback_id": "callback_id value",
           "color": color,
           "attachment_type": "default",
         }
@@ -86,6 +84,8 @@ def sent_verification
       payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: color})
     end
     payload[:attachments].last.merge!({
+      "fallback": "fallback string",
+      "callback_id": "callback_id value",
       "actions": [
         {
           "name": "ok",
