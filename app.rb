@@ -67,20 +67,23 @@ def sent_verification
     req = Net::HTTP::Post.new(uri.request_uri)
 
     req["Content-Type"] = "application/json" # httpリクエストヘッダの追加
+
+    color = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample
+    puts color
     payload = {
       "text": nana.comment,
       "attachments": [
         {
           "fallback": "fallback string",
           "callback_id": "callback_id value",
-          "color": ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample,
+          "color": color,
           "attachment_type": "default",
         }
       ]
     }
     nana.files.each_with_index do |v,i|
       payload[:attachments][i] ||= {}
-      payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: "danger"})
+      payload[:attachments][i].merge!({text: "#{i} image", image_url: v.medium.url, color: color)
     end
     payload[:attachments].last.merge!({
       "actions": [
@@ -103,5 +106,6 @@ def sent_verification
     req.body = payload.to_json
     res = https.request(req)
     nana.verification!
+    pp payload
   end
 end
