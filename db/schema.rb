@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926062100) do
+ActiveRecord::Schema.define(version: 20170926231142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20170926062100) do
     t.string "comment"
     t.integer "status", default: 0, null: false
     t.json "files"
+    t.string "media_ids"
   end
 
 end

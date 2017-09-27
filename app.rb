@@ -23,13 +23,18 @@ get '/send_to_slack' do
 end
 
 post '/register' do
-  nana = Nana.new(comment: params[:comment])
+  nana, media_ids = Nana.new(comment: params[:comment]), Array.new
   nana.files = params[:images]
   if nana.save
-    session[:responce] = {code: 200, messages: "成功しました", images: nana.files}
+    nana.files.each do |file|
+      media_ids << Hoge.twitter_auth.upload(open(file.medium.url))
+    end
+    nana.media_ids = media_ids.join(',')
+    session[:responce] = {code: 200, messages: "成功しました", images: nana.files} if nana.save
   else
     session[:responce] = {code: 400, messages: nana.errors.full_messages[0]}
   end
+  binding.pry
   erb :post_form
 end
 
@@ -37,24 +42,11 @@ post '/approval' do
   data = JSON.parse(params["payload"])
   tweet = Nana.find_by(id: data["actions"].first["value"].to_i)
   if data["actions"].first["name"] == "ok"
-    @rest = Twitter::REST::Client.new(
-      {
-        consumer_key: ENV.fetch("CONSUMER_KEY"),
-        consumer_secret: ENV.fetch("CONSUMER_SECRET"),
-        access_token: ENV.fetch("ACCESS_TOKEN"),
-        access_token_secret: ENV.fetch("ACCESS_TOKEN_SECRET")
-      }
 
-    )
     if tweet
-      media_ids = Array.new
-
-      json({text: "Successfully Tweeted!"})
-      tweet.files.each do |file|
-        media_ids << @rest.upload(open(file.medium.url))
-      end
-      @rest.update (tweet.comment), { media_ids: media_ids.join(',') }
+      Hoge.twitter_auth.update (tweet.comment), { media_ids: tweet.media_ids }
       tweet.sent!
+      json({text: "Successfully Tweeted!"})
 
     else
       json({text: "Error! select id is not found!"})

@@ -37,3 +37,18 @@ class Nana < ActiveRecord::Base
   validates :comment, length: { maximum: 124 }
   enum status: {unsent: 0, verification: 1, sent: 2}
 end
+
+
+class Hoge
+  def self.twitter_auth
+    @rest = Twitter::REST::Client.new(
+      {
+        consumer_key: ENV.fetch("CONSUMER_KEY"),
+        consumer_secret: ENV.fetch("CONSUMER_SECRET"),
+        access_token: ENV.fetch("ACCESS_TOKEN"),
+        access_token_secret: ENV.fetch("ACCESS_TOKEN_SECRET")
+      }
+    )
+  end
+end
+
