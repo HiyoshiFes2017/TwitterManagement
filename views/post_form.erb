@@ -22,15 +22,26 @@ img{
     </style>
   </head>
   <body>
-    <h2>日吉祭画像アップローダー</h2>
+    <div class="page-header">
+        <h1>日吉画像アップローダー</h1>
+    </div>
+
     <% if session[:responce] %>
-      <div class="alert alert-success" role="alert"> <%= session[:responce][:messages] %> </div>
-      <% session[:responce][:images].each do |image| %>
-        <img src="<%= image.medium.url %>" alt="" width="20%" >
+      <% if session[:responce][:code] == 200 %>
+        <div class="alert alert-success" role="alert"> <%= session[:responce][:messages] %> </div>
+      <% else %>
+        <div class="alert alert-danger" role="alert"> <%= session[:responce][:messages] %> </div>
+      <% end %>
+      <% if session[:responce][:images] %>
+        <% session[:responce][:images].each do |image| %>
+          <img src="<%= image.medium.url %>" alt="" width="20%" >
+        <% end %>
       <% end %>
     <% end %>
     <form action="/register" enctype="multipart/form-data" method="POST">
-      <textarea  type="text" name="comment" class="form-control" rows="10"></textarea><br><br>
+      <label>Comment: </label>
+      <textarea  type="text" name="comment" class="form-control" rows="7"></textarea><br><br>
+      <label>Images: </label>
       <input type="file" name="images[]" class="btn btn-default" multiple><br><br>
       <input type="submit" class="btn"><br><br>
     </form>
