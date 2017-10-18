@@ -110,8 +110,6 @@ class Hoge
         })
         nana.verification!
       end
-    else
-      @payload = {"text": "承認待ちはありません"}
     end
     req.body = @payload.to_json
     res = https.request(req)
