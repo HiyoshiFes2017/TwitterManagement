@@ -69,7 +69,7 @@ class Hoge
       nanas.each do |nana|
         color = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF"].sample
         @payload = {
-          "text": "[参加団体の宣伝]\n\n" + nana.comment ,
+          "text": nana.comment ,
           "attachments": [
             {
               "color": color,

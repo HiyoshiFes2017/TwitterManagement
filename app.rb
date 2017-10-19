@@ -25,7 +25,7 @@ get '/send_to_slack' do
 end
 
 post '/register' do
-  nana, media_ids = Nana.new(comment: params[:comment]), Array.new
+  nana, media_ids = Nana.new(comment: ("[参加団体の宣伝]\n\n" + params[:comment])), Array.new
   nana.files = params[:images]
   if nana.save
     nana.files.each do |file|
